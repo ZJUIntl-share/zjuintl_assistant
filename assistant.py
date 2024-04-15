@@ -149,7 +149,7 @@ class Assistant:
         logger.debug("Login Blackboard success")
 
 
-    def get_due_assignments(self):
+    def get_due_assignments(self) -> list[data_classes.BB_DueAssignment]:
         """
         Get due assignments from Blackboard
         """
@@ -189,7 +189,7 @@ class Assistant:
                 # courseName="ECE210:Analog Signal Processing-1097-LEC(2024 Spring)"
                 # title="HW6"
                 # type="SCHEDULED"
-                course = re.search(r"courseName=\"(.*?)\"", line).group(1).split(":")[0].encode("utf-8").decode("unicode_escape")
+                course = re.search(r"courseName=\"(.*?)\"", line).group(1).encode("utf-8").decode("unicode_escape")
                 timestamp = int(re.search(r"dueDate=new Date\((\d+)\)", line).group(1))/1000
                 title = re.search(r"title=\"(.*?)\"", line).group(1).encode("utf-8").decode("unicode_escape")
                 date = datetime.datetime.fromtimestamp(timestamp)
@@ -209,7 +209,7 @@ class Assistant:
         return assignments
 
 
-    def get_bb_grades(self, count):
+    def get_bb_grades(self, count) -> list[data_classes.BB_Grade]:
         """
         Get grades from Blackboard
         """
@@ -272,7 +272,7 @@ class Assistant:
         return result
 
 
-    def get_bb_announcements(self, count: int, full: bool = False):
+    def get_bb_announcements(self, count: int, full: bool = False) -> list[data_classes.Announcement]:
         """
         Get announcements from Blackboard
         """
