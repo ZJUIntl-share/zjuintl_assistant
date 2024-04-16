@@ -2,6 +2,6 @@
 assistant package
 """
 
-from .zjuintl_assistant import Assistant
+from .assistant import Assistant
 
 __all__ = ["Assistant"]

@@ -80,6 +80,20 @@ class Assistant:
         session = requests.Session()
         session.cookies = self.__get_cookie_jar()
 
+        if self.__is_login:
+            logger.debug("Already login, check login status")
+
+            # check login status
+            resp = session.get("https://zjuam.zju.edu.cn/cas/login")
+            if "统一身份认证平台" not in resp.text:
+                logger.debug("Already login, skip")
+            else:
+                logger.debug("Not login, try to login again")
+                self.logout()
+                self.login()
+
+            return
+
         # get execution value
         resp = session.get("https://zjuam.zju.edu.cn/cas/login")
         if "统一身份认证平台" not in resp.text:
@@ -129,13 +143,24 @@ class Assistant:
 
         logger.debug("Start login Blackboard")
 
-        if not self.__is_login:
-            self.login()
-        if not self.__is_login:
-            raise LoginError("Login to zjuam failed")
-
         session = requests.Session()
         session.cookies = self.__get_cookie_jar("login")
+
+        self.login()
+
+        if self.__is_blackboard_login:
+            logger.debug("Already login, check login status")
+
+            # check login status
+            resp = session.get("https://learn.intl.zju.edu.cn")
+            if "Welcome, " in resp.text:
+                logger.debug("Already login, skip")
+            else:
+                logger.debug("Not login, try to login again")
+                self.logout()
+                self.login_blackboard()
+
+            return
 
         # login Blackboard
         resp = session.get("https://zjuam.zju.edu.cn/cas/login?service=https://learn.intl.zju.edu.cn/webapps/bb-ssocas-BBLEARN/index.jsp&locale=zh_CN")
