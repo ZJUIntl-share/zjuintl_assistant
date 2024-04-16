@@ -261,7 +261,7 @@ class Assistant:
             raise Exception(f"Request failed, status code: {resp.status_code}")
         retries = 3
         while resp.json()["sv_moreData"] and retries > 0:
-            print("Retrying")
+            logging.warning("Retrying")
             resp = session.post(url, data=data)
             retries -= 1
 
@@ -319,7 +319,7 @@ class Assistant:
         resp = session.get(url)
 
         # get announcements
-        print("Fetching announcements, this may take a while...")
+        logging.info("Fetching announcements, this may take a while...")
         # first get providers
         logger.debug("Getting providers")
         url = "https://learn.intl.zju.edu.cn/webapps/streamViewer/streamViewer"
