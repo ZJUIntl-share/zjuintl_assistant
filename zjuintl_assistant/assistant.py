@@ -40,12 +40,13 @@ class Assistant:
 
         self.login()
 
-    def get_cookie_jar(self, base: str = None) -> requests.cookies.RequestsCookieJar:
+    def get_cookie_jar(self, key: str = None, base: str = None) -> requests.cookies.RequestsCookieJar:
         """
         Get cookie jar
         """
 
-        key = inspect.currentframe().f_back.f_code.co_name
+        if key is None:
+            key = inspect.currentframe().f_back.f_code.co_name
         if key not in self.__cookie_jars:
             if base is None:
                 logger.debug(f"{key} cookie jar not found, creating new one")
@@ -144,7 +145,7 @@ class Assistant:
         logger.debug("Start login Blackboard")
 
         session = requests.Session()
-        session.cookies = self.get_cookie_jar("login")
+        session.cookies = self.get_cookie_jar(base="login")
 
         self.login()
 
@@ -185,7 +186,7 @@ class Assistant:
         self.login_blackboard()
 
         session = requests.Session()
-        session.cookies = self.get_cookie_jar("login_blackboard")
+        session.cookies = self.get_cookie_jar(base="login_blackboard")
 
         url = "https://learn.intl.zju.edu.cn/webapps/portal/dwr_open/call/plaincall/NautilusViewService.getViewInfoWithLimit.dwr"
         data = constants.GET_BB_DUE_ASSIGNMENTS_PAYLOAD.copy()
@@ -242,7 +243,7 @@ class Assistant:
         self.login_blackboard()
 
         session = requests.Session()
-        session.cookies = self.get_cookie_jar("login_blackboard")
+        session.cookies = self.get_cookie_jar(base="login_blackboard")
 
         url = "https://learn.intl.zju.edu.cn/webapps/streamViewer/streamViewer"
         data = constants.GET_BB_GRADE_PAYLOAD.copy()
@@ -302,7 +303,7 @@ class Assistant:
         self.login_blackboard()
 
         session = requests.Session()
-        session.cookies = self.get_cookie_jar("login_blackboard")
+        session.cookies = self.get_cookie_jar(base="login_blackboard")
 
         # get JSESSIONID
         logger.debug("Getting JSESSIONID")
