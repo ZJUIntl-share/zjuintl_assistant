@@ -182,10 +182,7 @@ class Assistant:
         logger.debug("Start get due assignments")
 
         logger.debug("Checking login status of Blackboard")
-        if not self.__is_blackboard_login:
-            self.login_blackboard()
-        if not self.__is_blackboard_login:
-            raise LoginError("Login to Blackboard failed")
+        self.login_blackboard()
 
         session = requests.Session()
         session.cookies = self.__get_cookie_jar("login_blackboard")
@@ -242,10 +239,7 @@ class Assistant:
         logger.debug("Start get BB grades")
 
         logger.debug("Checking login status of Blackboard")
-        if not self.__is_blackboard_login:
-            self.login_blackboard()
-        if not self.__is_blackboard_login:
-            raise LoginError("Login to Blackboard failed")
+        self.login_blackboard()
 
         session = requests.Session()
         session.cookies = self.__get_cookie_jar("login_blackboard")
@@ -305,10 +299,7 @@ class Assistant:
         logger.debug("Start get BB announcements")
 
         logger.debug("Checking login status of Blackboard")
-        if not self.__is_blackboard_login:
-            self.login_blackboard()
-        if not self.__is_blackboard_login:
-            raise LoginError("Login to Blackboard failed")
+        self.login_blackboard()
 
         session = requests.Session()
         session.cookies = self.__get_cookie_jar("login_blackboard")
