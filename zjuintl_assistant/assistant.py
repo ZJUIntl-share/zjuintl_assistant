@@ -144,10 +144,10 @@ class Assistant:
 
         logger.debug("Start login Blackboard")
 
+        self.login()
+
         session = requests.Session()
         session.cookies = self.get_cookie_jar(base="login")
-
-        self.login()
 
         if self.__is_blackboard_login:
             logger.debug("Already login, check login status")
