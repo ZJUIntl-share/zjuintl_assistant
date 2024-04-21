@@ -256,7 +256,7 @@ class Assistant:
             raise Exception(f"Request failed, status code: {resp.status_code}")
         retries = 3
         while resp.json()["sv_moreData"] and retries > 0:
-            logging.warning("Retrying")
+            logger.warning("Retrying")
             resp = session.post(url, data=data)
             retries -= 1
 
@@ -311,7 +311,7 @@ class Assistant:
         resp = session.get(url)
 
         # get announcements
-        logging.info("Fetching announcements, this may take a while...")
+        logger.info("Fetching announcements, this may take a while...")
         # first get providers
         logger.debug("Getting providers")
         url = "https://learn.intl.zju.edu.cn/webapps/streamViewer/streamViewer"
@@ -349,11 +349,13 @@ class Assistant:
             course = courses[item["se_courseId"]]
             html_content = item["itemSpecificData"]["notificationDetails"]["announcementBody"]
             date = datetime.datetime.fromtimestamp(item["se_timestamp"]/1000)
+            event_type = item["extraAttribs"]["event_type"]
             result.append(data_classes.Announcement(
                 title=title,
                 course=course,
                 html_content=html_content,
-                date=date
+                date=date,
+                event_type=event_type
             ))
             cnt += 1
 
