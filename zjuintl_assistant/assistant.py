@@ -7,6 +7,7 @@ import inspect
 import requests
 import requests.cookies
 import rsa
+import bs4
 
 # import login_utils
 # import constants
@@ -36,6 +37,7 @@ class Assistant:
         self.__password = password
         self.__is_login = False
         self.__is_blackboard_login = False
+        self.__is_myZJU_login = False
         self.__cookie_jars: dict[str, requests.cookies.RequestsCookieJar] = {}
 
         self.login()
@@ -68,6 +70,7 @@ class Assistant:
         self.__cookie_jars: dict[str, requests.cookies.RequestsCookieJar] = {}
         self.__is_login = False
         self.__is_blackboard_login = False
+        self.__is_myZJU_login = False
         logger.debug("Logout success")
 
 
@@ -360,6 +363,100 @@ class Assistant:
             cnt += 1
 
         logger.debug("Get BB announcements success")
+
+        return result
+
+
+    def login_myZJU(self):
+        """
+        Login to myZJU
+        """
+
+        logger.debug("Start login myZJU")
+
+        self.login()
+
+        session = requests.Session()
+        session.cookies = self.get_cookie_jar(base="login")
+
+        if self.__is_myZJU_login:
+            logger.debug("Already login, check login status")
+
+            # check login status
+            resp = session.get("https://www.intl.zju.edu.cn/my-zju/zh-hans/students")
+            if "我的待办" in resp.text:
+                logger.debug("Already login, skip")
+            else:
+                logger.debug("Not login, try to login again")
+                self.logout()
+                self.login_myZJU()
+
+        # login myZJU
+        resp = session.get("https://www.intl.zju.edu.cn/my-zju/oauth2zju")
+
+        # check if already login
+        resp = session.get("https://www.intl.zju.edu.cn/my-zju/zh-hans/students")
+        if "我的待办" in resp.text:
+            self.__is_myZJU_login = True
+            logger.debug("Login myZJU success")
+        else:
+            logger.error("Login to myZJU failed")
+            raise LoginError("Login to myZJU failed")
+
+
+    def get_myZJU_notices(self, count: int, EN: bool = False, get_content: bool = False) -> list[data_classes.MyZJU_Notice]:
+        """
+        Get notices from myZJU
+
+        Args:
+            count: Number of notices to get
+            EN: Whether to get English notices (True for English, False for Chinese)
+            get_content: Whether to get content of the notice
+
+        Returns:
+            A list of notices
+        """
+
+        logger.debug("Start get myZJU notices")
+
+        logger.debug("Checking login status of myZJU")
+        self.login_myZJU()
+
+        session = requests.Session()
+        session.cookies = self.get_cookie_jar(base="login_myZJU")
+
+        url = "https://www.intl.zju.edu.cn/my-zju/{}/notice?field_notice_type_target_id=All&title=&page={}".format("en" if EN else "zh-hans", "{}")
+        page = 0
+        cnt = 0
+        result = []
+        
+        while (cnt < count):
+            resp = session.get(url.format(page))
+            soup = bs4.BeautifulSoup(resp.text, "html.parser")
+            notices = soup.find_all("div", class_="title d-flex align-items-center mr-auto")
+            for notice in notices:
+                if cnt >= count:
+                    break
+                title = notice.a.text
+                if "[Top]" in notice.text:
+                    title = "[Top] " + title
+                link = f"https://www.intl.zju.edu.cn{notice.a['href']}"
+                 
+                content = ""
+                if get_content:
+                    content_resp = session.get(link)
+                    content_soup = bs4.BeautifulSoup(content_resp.text, "html.parser")
+                    content = content_soup.find("div", class_="row row-offcanvas row-offcanvas-left clearfix").prettify()
+
+                result.append(data_classes.MyZJU_Notice(
+                    title=title,
+                    link=link,
+                    content=content
+                ))
+                cnt += 1
+            page += 1
+        
+        logger.debug("Get myZJU notices success")
 
         return result
 

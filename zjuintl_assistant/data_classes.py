@@ -43,6 +43,16 @@ class Announcement:
         return EVENT_TYPE_MAP[self.event_type]
 
 
+@dataclass
+class MyZJU_Notice:
+    """
+    Class to store myZJU notice data
+    """
+    title: str
+    link: str
+    content: str
+
+
 EVENT_TYPE_MAP = {
     'SU:SU_SUBMIT': 'Survey Submitted',
     'WK:WK_GR_ATTEMPT': 'Group Wiki Needs Grading',

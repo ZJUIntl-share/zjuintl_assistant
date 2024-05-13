@@ -5,6 +5,7 @@
 - [x] Get deadline of assignments from Blackboard
 - [x] Get latest grades of assignments from Blackboard
 - [x] Get latest announcements from Blackboard
+- [x] Get notices from myZJU
 - [ ] Get information from PeopleSoft. **I've not figured out how to do this yet. PRs and disscussions are welcome!**
 
 ## Usage
