@@ -443,13 +443,21 @@ class Assistant:
                 title = notice.a.text
                 if "[Top]" in notice.text:
                     title = "[Top] " + title
-                link = f"https://www.intl.zju.edu.cn{notice.a['href']}"
+                link = notice.a["href"]
+                if not link.startswith("http"):
+                    link = f"https://www.intl.zju.edu.cn{link}"
                  
                 content = ""
                 if get_content:
-                    content_resp = session.get(link)
-                    content_soup = bs4.BeautifulSoup(content_resp.text, "html.parser")
-                    content = content_soup.find("div", class_="row row-offcanvas row-offcanvas-left clearfix").prettify()
+                    if not notice.a["href"].startswith("http"):
+                        content_resp = session.get(link)
+                        content_soup = bs4.BeautifulSoup(content_resp.text, "html.parser")
+                        content = content_soup.find("div", class_="row row-offcanvas row-offcanvas-left clearfix").prettify()
+                    else:
+                        if EN:
+                            content = "This is an external link, no content preview available"
+                        else:
+                            content = "这是一个外部链接，没有内容预览"
 
                 date = datetime.datetime.strptime(item.find_all("div")[-1].text, "%Y-%m-%d")
 
