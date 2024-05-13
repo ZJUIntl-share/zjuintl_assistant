@@ -43,6 +43,13 @@ For more details, please refer to [wiki](https://github.com/ZJUIntl-share/zjuint
 
 This project is simply a spider that replay the requests of the browser. Login process of zjuam is based on package capture and reverse engineering of javascript code. However, the analysis of PeopleSoft is too difficult for me. So any help is welcome! I think possible difficulty is the management of cookies.
 
+## Links
+
+- [PyPI](https://pypi.org/project/zjuintl-assistant/)
+- [GitHub](https://github.com/ZJUIntl-share/zjuintl_assistant)
+- [Wiki](https://github.com/ZJUIntl-share/zjuintl_assistant/wiki)
+- [Issues](https://github.com/ZJUIntl-share/zjuintl_assistant/issues)
+
 ## Credits
 
 - [ZJUintl-gRPC](https://github.com/QSCTech/ZJUintl-gRPC)

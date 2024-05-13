@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='zjuintl_assistant',
-    version='0.0.1',
+    version='0.0.2',
     description='Python interface for getting data from different platforms of ZJU International College',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -15,6 +15,6 @@ setup(
         'requests',
         'beautifulsoup4',
     ],
-    python_requires='>=3',
+    python_requires='>=3.6',
     zip_safe=False
 )
