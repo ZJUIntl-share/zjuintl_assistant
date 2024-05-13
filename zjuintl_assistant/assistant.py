@@ -433,10 +433,13 @@ class Assistant:
         while (cnt < count):
             resp = session.get(url.format(page))
             soup = bs4.BeautifulSoup(resp.text, "html.parser")
-            notices = soup.find_all("div", class_="title d-flex align-items-center mr-auto")
-            for notice in notices:
+
+            notices = soup.find_all("span", class_="field-content")
+            for item in notices:
                 if cnt >= count:
                     break
+                # get the first div
+                notice = item.find("div")
                 title = notice.a.text
                 if "[Top]" in notice.text:
                     title = "[Top] " + title
@@ -448,10 +451,13 @@ class Assistant:
                     content_soup = bs4.BeautifulSoup(content_resp.text, "html.parser")
                     content = content_soup.find("div", class_="row row-offcanvas row-offcanvas-left clearfix").prettify()
 
+                date = datetime.datetime.strptime(item.find_all("div")[-1].text, "%Y-%m-%d")
+
                 result.append(data_classes.MyZJU_Notice(
                     title=title,
                     link=link,
-                    content=content
+                    content=content,
+                    date=date
                 ))
                 cnt += 1
             page += 1

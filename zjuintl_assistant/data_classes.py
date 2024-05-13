@@ -51,6 +51,7 @@ class MyZJU_Notice:
     title: str
     link: str
     content: str
+    date: datetime.datetime
 
 
 EVENT_TYPE_MAP = {
