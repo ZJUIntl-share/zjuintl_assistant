@@ -10,9 +10,34 @@
 
 ## Usage
 
-It's a package that contains a class `Assistant`, which provides abilities shown in [Features](#features). Dependencies are listed in `requirements.txt` in the same folder.
+Install the package from PyPI:
 
-For more details, please refer to [wiki](https://github.com/ZJUIntl-share/zjuintl_assistant/wiki) (WIP).
+```bash
+pip install zjuintl-assistant
+```
+
+Then you can use the package in your code:
+
+```python
+from zjuintl_assistant import Assistant
+
+assistant = Assistant(username='your_username', password='your_password')
+
+# Get deadlines of assignments
+deadlines = assistant.get_deadlines()
+# Get 10 latest grades
+grades = assistant.get_grades(10)
+# Get 10 latest announcements (excluding ones without main content)
+announcements = assistant.get_announcements(10)
+# Get 10 latest announcements (including ones without main content)
+announcements_full = assistant.get_announcements(10, full=True)
+# Get 10 latest notices from myZJU (not fetching main content)
+notices = assistant.get_notices(10)
+# Get 10 latest notices from myZJU (English version and including main content)
+notices_en_full = assistant.get_notices(10, EN=True, get_content=True)
+```
+
+For more details, please refer to [wiki](https://github.com/ZJUIntl-share/zjuintl_assistant/wiki).
 
 ## Development Notes
 
