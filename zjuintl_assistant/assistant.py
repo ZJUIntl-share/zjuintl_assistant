@@ -452,6 +452,16 @@ class Assistant:
                     if not notice.a["href"].startswith("http"):
                         content_resp = session.get(link)
                         content_soup = bs4.BeautifulSoup(content_resp.text, "html.parser")
+
+                        # replace relative links
+                        for elem in content_soup.find_all(["a", "img"]):
+                            if "href" in elem.attrs:
+                                if not elem["href"].startswith("http"):
+                                    elem["href"] = f"https://www.intl.zju.edu.cn{elem['href']}"
+                            if "src" in elem.attrs:
+                                if not elem["src"].startswith("http"):
+                                    elem["src"] = f"https://www.intl.zju.edu.cn{elem['src']}"
+
                         content = content_soup.find("div", class_="row row-offcanvas row-offcanvas-left clearfix").prettify()
                     else:
                         if EN:
