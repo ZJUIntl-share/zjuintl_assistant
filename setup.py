@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='zjuintl_assistant',
-    version='0.0.2',
+    version='0.0.3',
     description='Python interface for getting data from different platforms of ZJU International College',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
