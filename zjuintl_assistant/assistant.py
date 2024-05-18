@@ -61,6 +61,20 @@ class Assistant:
         return self.__cookie_jars[key]
 
 
+    def remove_cookie_jar(self, key: str = None):
+        """
+        Remove cookie jar
+        """
+
+        if key is None:
+            key = inspect.currentframe().f_back.f_code.co_name
+        if key in self.__cookie_jars:
+            logger.debug(f"Removing {key} cookie jar")
+            self.__cookie_jars.pop(key)
+        else:
+            logger.debug(f"{key} cookie jar not found")
+
+
     def logout(self):
         """
         Logout by clearing cookies and set related flags to False
@@ -292,6 +306,9 @@ class Assistant:
 
         logger.debug("Get BB grades success")
 
+        # remove cookie jar
+        self.remove_cookie_jar()
+
         return result
 
 
@@ -363,6 +380,9 @@ class Assistant:
             cnt += 1
 
         logger.debug("Get BB announcements success")
+
+        # remove cookie jar
+        self.remove_cookie_jar()
 
         return result
 
